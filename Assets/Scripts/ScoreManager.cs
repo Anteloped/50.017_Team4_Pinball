@@ -7,8 +7,8 @@ using TMPro;
 public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
-    public TextMeshProUGUI scoreText;
-    public TextMeshProUGUI highScoreText;
+    [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] TextMeshProUGUI highScoreText;
 
     int score = 0;
     int highScore = 0;
@@ -26,15 +26,9 @@ public class ScoreManager : MonoBehaviour
         highScoreText.text = "HIGH SCORE: " + highScore.ToString() + " POINTS";
     }
 
-    // Update is called once per frame
-    void Update()
+    public void AddPoint(int points=1)
     {
-        
-    }
-
-    public void AddPoint()
-    {
-        score += 1;
+        score += points;
         scoreText.text = score.ToString() + " POINTS";
         if (score > highScore)
         {

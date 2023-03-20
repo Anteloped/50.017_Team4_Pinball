@@ -7,7 +7,7 @@ public class TiltTable : MonoBehaviour
     [SerializeField] float tiltSpeed = 10.0f;
     [SerializeField] float tiltAngle = 10.0f;
 
-    private void TT(Vector3 tiltDirection)
+    void TT(Vector3 tiltDirection)
     {
         transform.Rotate(tiltDirection * tiltSpeed * Time.deltaTime);
         float angle = transform.eulerAngles.z;
@@ -19,18 +19,10 @@ public class TiltTable : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
         float angle = transform.eulerAngles.z;
-        Debug.Log(angle);
-        Debug.Log(tiltAngle);
         if (angle < tiltAngle + 10 || angle > 350 - tiltAngle) {
             if (Input.GetKey(KeyCode.Z))
             {

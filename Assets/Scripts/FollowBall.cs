@@ -4,11 +4,10 @@ using UnityEngine;
 
 public class FollowBall : MonoBehaviour
 {
-    public Transform target;
-
-    public float smoothSpeed = 0.125f;
-    public Vector3 offset;
-    public bool follow = false;
+    [SerializeField] Transform target;
+    [SerializeField] float smoothSpeed = 0.125f;
+    [SerializeField] Vector3 offset;
+    [SerializeField] bool follow = false;
 
     void FixedUpdate()
     {
