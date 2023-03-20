@@ -4,30 +4,34 @@ using UnityEngine;
 
 public class TiltTable : MonoBehaviour
 {
-    public float tiltSpeed = 10.0f;
-    public float tiltAngle = 10.0f;
+    [SerializeField] float tiltSpeed = 10.0f;
+    [SerializeField] float tiltAngle = 10.0f;
 
-    public void TT(Vector3 tiltDirection)
+    void TT(Vector3 tiltDirection)
     {
         transform.Rotate(tiltDirection * tiltSpeed * Time.deltaTime);
-    }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
+        float angle = transform.eulerAngles.z;
+        if (angle > tiltAngle && angle < 90) {
+            transform.rotation = Quaternion.Euler(0, 0, tiltAngle);
+        }
+        else if (angle < 360 - tiltAngle && angle > 270) {
+            transform.rotation = Quaternion.Euler(0, 0, 360 - tiltAngle);
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.Z))
-        {
-            TT(new Vector3(0, 0, 1));
-        }
-        else if (Input.GetKey(KeyCode.X))
-        {
-            TT(new Vector3(0, 0, -1));
+        float angle = transform.eulerAngles.z;
+        if (angle < tiltAngle + 10 || angle > 350 - tiltAngle) {
+            if (Input.GetKey(KeyCode.Z))
+            {
+                TT(Vector3.forward);
+            }
+            else if (Input.GetKey(KeyCode.X))
+            {
+                TT(-Vector3.forward);
+            }
         }
     }
 }

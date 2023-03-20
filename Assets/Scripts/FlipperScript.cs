@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class FlipperScript : MonoBehaviour
 {
-    public float restPosition = 0f;
-    public float pressedPosition = 45f;
-    public float hitStrength = 10000f;
-    public float flipperDamper = 25f;
+    [SerializeField] float restPosition = 0f;
+    [SerializeField] float pressedPosition = 45f;
+    [SerializeField] float hitStrength = 10000f;
+    [SerializeField] float flipperDamper = 25f;
+    [SerializeField] string inputName;
     HingeJoint hinge;
-    public string inputName;
 
     void Start()
     {

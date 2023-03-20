@@ -4,35 +4,33 @@ using UnityEngine;
 
 public class TokenInstance : MonoBehaviour
 {
-    public int scoreValue = 1;
-    public float bumperForce = 500f;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] int scoreValue = 1;
+    float bumperForce = 10f;
+    bool bumpLock = false;
+    float timer = 0.0f;
+    float lockTimer = 1.0f;
 
-    // Update is called once per frame
-    void Update()
-    {
-
+    void Update() {
+        if (bumpLock) {
+            timer += Time.deltaTime;
+            if (timer > lockTimer) {
+                bumpLock = false;
+                timer = 0.0f;
+            }
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ball"))
+        if (!bumpLock && other.gameObject.CompareTag("Ball"))
         {
             Rigidbody ballRigidbody = other.gameObject.GetComponent<Rigidbody>();    
-
             Vector3 bumperNormal = other.contacts[0].normal;
+            
             ballRigidbody.AddForce(bumperNormal * bumperForce, ForceMode.Impulse);
-            ScoreManager.instance.AddPoint();
-            ballRigidbody.velocity = new Vector3(ballRigidbody.velocity.x, 0f, ballRigidbody.velocity.z);
+            ScoreManager.instance.AddPoint(scoreValue);
+            //ballRigidbody.velocity = new Vector3(ballRigidbody.velocity.x, 0f, ballRigidbody.velocity.z);
+            bumpLock = true;
         }
-    }
-
-    void Awake()
-    {
-
     }
 }

@@ -9,17 +9,16 @@ using UnityEngine.UI;
 public class PlungerScript : MonoBehaviour
 {
     float power;
-    float minPower = 0f;
-    public float maxPower = 1000f;
-    public Slider powerSlider;
-    public List<Rigidbody> ballList;
+    [SerializeField] float minPower = 0f;
+    [SerializeField] float maxPower = 200f;
+    [SerializeField] Slider powerSlider;
+    Rigidbody ball;
     bool ballReady;
 
     void Start()
     {
         powerSlider.minValue = 0f;
         powerSlider.maxValue = maxPower;
-        ballList = new List<Rigidbody>();
     }
 
     void Update()
@@ -34,23 +33,24 @@ public class PlungerScript : MonoBehaviour
         }
 
         powerSlider.value = power;
-        if(ballList.Count > 0)
+        if(ball != null)
         {
             ballReady = true;
             if (Input.GetKey(KeyCode.Space))
             {
                 if(power <= maxPower)
                 {
-                    power += 100 * Time.deltaTime;
+                    power += 150 * Time.deltaTime;
                 }
             }
 
             if(Input.GetKeyUp(KeyCode.Space))
             {
-                foreach(Rigidbody r in ballList)
-                {
-                    r.AddForce(power*Vector3.forward);
+                if (power < minPower) {
+                    power = minPower;
                 }
+
+                ball.AddForce(power * Vector3.forward);
             }
         }
         else
@@ -64,7 +64,7 @@ public class PlungerScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            ballList.Add(other.gameObject.GetComponent<Rigidbody>());
+            ball = other.GetComponent<Rigidbody>();
         }
     }
 
@@ -72,7 +72,7 @@ public class PlungerScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            ballList.Remove(other.gameObject.GetComponent<Rigidbody>());
+            ball = null;
             power = 0f;
         }
     }
