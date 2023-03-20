@@ -23,8 +23,8 @@ public class TokenInstance : MonoBehaviour
         if (other.gameObject.CompareTag("Ball"))
         {
             Rigidbody ballRigidbody = other.gameObject.GetComponent<Rigidbody>();    
-
             Vector3 bumperNormal = other.contacts[0].normal;
+            
             ballRigidbody.AddForce(bumperNormal * bumperForce, ForceMode.Impulse);
             ScoreManager.instance.AddPoint();
             ballRigidbody.velocity = new Vector3(ballRigidbody.velocity.x, 0f, ballRigidbody.velocity.z);

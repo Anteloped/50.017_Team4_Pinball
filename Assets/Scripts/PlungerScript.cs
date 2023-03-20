@@ -41,7 +41,7 @@ public class PlungerScript : MonoBehaviour
             {
                 if(power <= maxPower)
                 {
-                    power += 100 * Time.deltaTime;
+                    power += 250 * Time.deltaTime;
                 }
             }
 
