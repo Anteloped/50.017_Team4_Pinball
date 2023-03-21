@@ -33,5 +33,14 @@ public class TiltTable : MonoBehaviour
                 TT(-Vector3.forward);
             }
         }
+
+        if (!Input.GetKey(KeyCode.Z) && !Input.GetKey(KeyCode.X)) {
+            if (angle > 0.5f && angle < 90) {
+                TT(-Vector3.forward);
+            }
+            else if (angle < 365.5f && angle > 270) {
+                TT(Vector3.forward);
+            }
+        }
     }
 }
