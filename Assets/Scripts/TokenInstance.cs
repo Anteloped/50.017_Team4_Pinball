@@ -7,15 +7,15 @@ public class TokenInstance : MonoBehaviour
     [SerializeField] int scoreValue = 1;
     float bumperForce = 2f;
     bool bumpLock = false;
-    float timer = 0.0f;
-    float lockTimer = 1.0f;
+    float timer = 0f;
+    float lockTimer = 0.25f;
 
-    void Update() {
+    void FixedUpdate() {
         if (bumpLock) {
-            timer += Time.deltaTime;
-            if (timer > lockTimer) {
+            timer += Time.fixedDeltaTime;
+            if (timer >=lockTimer) {
                 bumpLock = false;
-                timer = 0.0f;
+                timer = 0f;
             }
         }
     }
@@ -25,9 +25,9 @@ public class TokenInstance : MonoBehaviour
         if (!bumpLock && other.gameObject.CompareTag("Ball"))
         {
             Rigidbody ballRigidbody = other.gameObject.GetComponent<Rigidbody>();    
-            Vector3 bumperNormal = other.contacts[0].normal;
+            Vector3 bumperNormal = other.GetContact(0).normal;
             
-            ballRigidbody.AddForce(bumperNormal * bumperForce, ForceMode.Impulse);
+            ballRigidbody.AddForce(-bumperNormal * bumperForce, ForceMode.Impulse);
             ScoreManager.instance.AddPoint(scoreValue);
             //ballRigidbody.velocity = new Vector3(ballRigidbody.velocity.x, 0f, ballRigidbody.velocity.z);
             bumpLock = true;

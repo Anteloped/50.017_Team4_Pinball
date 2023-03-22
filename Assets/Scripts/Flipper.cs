@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 
 public class Flipper : MonoBehaviour
@@ -13,8 +12,8 @@ public class Flipper : MonoBehaviour
     Quaternion initialOrientation;
     Vector3 initialAngles;
     bool _lock = false;
-    int timer = 0;
-    int lockTimer = 60;
+    float timer = 0f;
+    float lockTimer = 0.5f;
     
     // Start is called before the first frame update
     void Start()
@@ -27,7 +26,7 @@ public class Flipper : MonoBehaviour
     {
         if (Input.GetButton(buttonName))
         {
-            //Rotate the flipper
+            // Rotate the flipper
             transform.Rotate(Vector3.up * maxAngle / flipTime * Time.deltaTime);
             Vector3 angles = transform.rotation.eulerAngles;
             if (!isLeftSide && angles.y - initialAngles.y >= maxAngle)
@@ -37,12 +36,8 @@ public class Flipper : MonoBehaviour
             else if (isLeftSide && angles.y - initialAngles.y <= 360 + maxAngle) {
                 transform.rotation = Quaternion.Euler(initialAngles + Vector3.up * (360 + maxAngle));
             }
-
-            if (!_lock && trigger.ball != null) {
-                trigger.ball.AddForce(Vector3.forward * 2.5f, ForceMode.Impulse);
-                _lock = true;
-            }
         }
+        // Return flipper to default position
         else if (transform.rotation.eulerAngles.y != initialAngles.y) {
             transform.Rotate(Vector3.up * -maxAngle / flipTime * Time.deltaTime);
             Vector3 angles = transform.rotation.eulerAngles;
@@ -53,13 +48,20 @@ public class Flipper : MonoBehaviour
                 transform.rotation = Quaternion.Euler(initialAngles);
             }
         }
+
+        // Apply force to the ball if it is on the flipper
+        if (Input.GetButtonDown(buttonName) && !_lock && trigger.ball != null) {
+            trigger.ball.ApplyForce(Vector3.forward * 1f);
+            _lock = true;
+        }
     }
 
     void FixedUpdate() {
+        // Timed lock to prevent force from being applied repeatedly every frame
         if (_lock) {
-            timer += 1;
+            timer += Time.fixedDeltaTime;
             if (timer >= lockTimer) {
-                timer = 0;
+                timer = 0f;
                 _lock = false;
             }
         }

@@ -10,9 +10,9 @@ public class PlungerScript : MonoBehaviour
 {
     float power;
     [SerializeField] float minPower = 0f;
-    [SerializeField] float maxPower = 200f;
+    [SerializeField] float maxPower = 10f;
     [SerializeField] Slider powerSlider;
-    Rigidbody ball;
+    Ball ball;
     bool ballReady;
 
     void Start()
@@ -40,7 +40,7 @@ public class PlungerScript : MonoBehaviour
             {
                 if(power <= maxPower)
                 {
-                    power += 150 * Time.deltaTime;
+                    power += 0.75f * maxPower * Time.deltaTime;
                 }
             }
 
@@ -49,8 +49,8 @@ public class PlungerScript : MonoBehaviour
                 if (power < minPower) {
                     power = minPower;
                 }
-
-                ball.AddForce(power * Vector3.forward);
+                
+                ball.ApplyForce(power * Vector3.forward);
             }
         }
         else
@@ -64,7 +64,7 @@ public class PlungerScript : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Ball"))
         {
-            ball = other.GetComponent<Rigidbody>();
+            ball = other.GetComponent<Ball>();
         }
     }
 

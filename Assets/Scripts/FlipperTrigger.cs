@@ -4,13 +4,11 @@ using UnityEngine;
 
 public class FlipperTrigger : MonoBehaviour
 {
-    public Rigidbody ball = null;
+    public Ball ball = null;
 
     void OnTriggerEnter(Collider other) {
-        Debug.Log("enter");
         if (other.gameObject.CompareTag("Ball")) {
-            Debug.Log("ball found");
-            ball = other.GetComponent<Rigidbody>();
+            ball = other.GetComponent<Ball>();
         }
     }
 
