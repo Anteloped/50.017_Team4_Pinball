@@ -5,7 +5,7 @@ using UnityEngine;
 public class TokenInstance : MonoBehaviour
 {
     [SerializeField] int scoreValue = 1;
-    float bumperForce = 10f;
+    float bumperForce = 2f;
     bool bumpLock = false;
     float timer = 0.0f;
     float lockTimer = 1.0f;
