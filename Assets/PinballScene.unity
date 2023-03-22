@@ -1155,9 +1155,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 292029388}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: 0.2588191, z: -0, w: 0.9659258}
+  m_LocalPosition: {x: 0.43301266, y: 0, z: -0.25}
+  m_LocalScale: {x: 1, y: 0.2, z: 0.20000002}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1421799760}
@@ -1256,7 +1256,7 @@ GameObject:
   - component: {fileID: 292598716}
   - component: {fileID: 292598715}
   m_Layer: 0
-  m_Name: RightFlipper (1)
+  m_Name: RFlipper
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1269,9 +1269,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 292598713}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5, y: 0, z: -0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0.258819, z: -0, w: 0.9659259}
+  m_LocalPosition: {x: -0.40400088, y: 0, z: -0.22999978}
+  m_LocalScale: {x: 1, y: 0.2, z: 0.20000005}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2022093361}
@@ -2300,7 +2300,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 710814763}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.030001, y: -0.16, z: 3.2100003}
+  m_LocalPosition: {x: 0, y: 0, z: 3.2100003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2672,7 +2672,7 @@ MonoBehaviour:
   target: {fileID: 610650756}
   smoothSpeed: 0.125
   offset: {x: 0, y: 5, z: -5}
-  follow: 1
+  follow: 0
 --- !u!1 &1015903979
 GameObject:
   m_ObjectHideFlags: 0
@@ -2825,8 +2825,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1119550367}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 3.030001, y: 0.16, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2931,7 +2931,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1841203286}
-  m_RootOrder: 2
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -20, z: 0}
 --- !u!1 &1395149157
 GameObject:
@@ -2958,7 +2958,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1395149157}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.030001, y: 5.13, z: 3.2100003}
+  m_LocalPosition: {x: 0, y: 5.29, z: 3.2100003}
   m_LocalScale: {x: 0.56, y: 1, z: 1.31}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3002,14 +3002,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1421799759}
-  m_LocalRotation: {x: -0, y: 0.2588191, z: -0, w: 0.9659258}
-  m_LocalPosition: {x: -4.205, y: -0.059999987, z: -1.544}
-  m_LocalScale: {x: 1, y: 0.2, z: 0.20000002}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.205, y: -0.059999987, z: -1.5439999}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 292029389}
   m_Father: {fileID: 1841203286}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1421799761
 MonoBehaviour:
@@ -3024,8 +3024,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAngle: -45
-  flipTime: 0
+  flipTime: 0.1
   buttonName: LFlipper
+  isLeftSide: 1
 --- !u!1 &1526334826
 GameObject:
   m_ObjectHideFlags: 0
@@ -3483,7 +3484,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1744497901}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.030001, y: 0.16, z: -3.2100003}
+  m_LocalPosition: {x: 0, y: 0, z: -3.2100003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3719,10 +3720,10 @@ Transform:
   m_Children:
   - {fileID: 1526334832}
   - {fileID: 2125101334}
-  - {fileID: 1390998858}
-  - {fileID: 1999419642}
   - {fileID: 2022093361}
   - {fileID: 1421799760}
+  - {fileID: 1390998858}
+  - {fileID: 1999419642}
   m_Father: {fileID: 710814764}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4151,7 +4152,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1841203286}
-  m_RootOrder: 3
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 20, z: 0}
 --- !u!1 &2022093360
 GameObject:
@@ -4177,14 +4178,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2022093360}
-  m_LocalRotation: {x: -0, y: -0.258819, z: -0, w: 0.9659259}
-  m_LocalPosition: {x: -1.858, y: -0.059999987, z: -1.547}
-  m_LocalScale: {x: 1, y: 0.2, z: 0.20000005}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -1.874, y: -0.059999987, z: -1.552}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 292598714}
   m_Father: {fileID: 1841203286}
-  m_RootOrder: 4
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2022093362
 MonoBehaviour:
@@ -4199,8 +4200,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxAngle: 45
-  flipTime: 0.5
+  flipTime: 0.1
   buttonName: RFlipper
+  isLeftSide: 0
 --- !u!1 &2030406799
 GameObject:
   m_ObjectHideFlags: 0
@@ -4750,11 +4752,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2912179836777424613, guid: d2ad74d2026f91e469b1081ac82ce5d0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.030001
       objectReference: {fileID: 0}
     - target: {fileID: 2912179836777424613, guid: d2ad74d2026f91e469b1081ac82ce5d0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.16
       objectReference: {fileID: 0}
     - target: {fileID: 2912179836777424613, guid: d2ad74d2026f91e469b1081ac82ce5d0, type: 3}
       propertyPath: m_LocalPosition.z
