@@ -10,6 +10,11 @@ public class TokenInstance : MonoBehaviour
     float timer = 0f;
     float lockTimer = 0.25f;
 
+    void Start() {
+        Vector3 scale = transform.localScale;
+        transform.localScale = new Vector3(scale.x * 1.5f, scale.y, scale.z * 1.5f);
+    }
+
     void FixedUpdate() {
         if (bumpLock) {
             timer += Time.fixedDeltaTime;

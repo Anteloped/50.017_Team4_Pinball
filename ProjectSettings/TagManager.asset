@@ -7,6 +7,8 @@ TagManager:
   - Ball
   - Wall
   - Bumper
+  - Plunger
+  - Bound
   layers:
   - Default
   - TransparentFX
