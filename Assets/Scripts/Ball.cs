@@ -7,7 +7,7 @@ public class Ball : MonoBehaviour
 {
     [SerializeField] Vector3 endGameCoord;
     [SerializeField] float gravity = -9.8f;
-    [SerializeField] float tableAngle = 7f;
+    [SerializeField] float tableAngle = 7f; // the angle at which the table slants forward
     [SerializeField] Transform table;
 
     static float mass = 0.08f;
@@ -17,20 +17,12 @@ public class Ball : MonoBehaviour
     Vector3 grav;
     bool rolling = false;
 
-    /*
-    Collision cachedCollision;
-    float cacheTimer = 0f;
-    float cacheLimit = 0.1f;
-    bool cached = false;
-    */
-
     void Start() {
-        gravity *= Mathf.Sin(Mathf.Deg2Rad * tableAngle);
+        gravity *= Mathf.Sin(Mathf.Deg2Rad * tableAngle); // use the component of gravity in the direction parallel to the table
         grav = new Vector3(0, 0, gravity);
         vel = new Vector3(0, 0, -1.5f);
     }
 
-    // Update is called once per frame
     void Update()
     {
         if ((transform.position.z - endGameCoord.z) <= 0){
@@ -39,8 +31,11 @@ public class Ball : MonoBehaviour
     }
 
     void FixedUpdate() {
+        // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
         grav = new Vector3(gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad), 0, gravity);
 
+
+        // Update ball position
         Vector3 pos = transform.position;
         pos += vel * Time.fixedDeltaTime; // + acc * Mathf.Pow(Time.deltaTime, 2) / 2;
         //pos.x = Mathf.Clamp(pos.x, -2.6f, 3.2f);
@@ -48,21 +43,14 @@ public class Ball : MonoBehaviour
         //pos.z = Mathf.Clamp(pos.z, endGameCoord.z - 1, 6.05f);
         transform.position = pos;
 
+        // Update ball velocity
         vel += acc * Time.fixedDeltaTime;
+
+        // Update ball acceleration
         if (!rolling) {
             acc += grav * Time.fixedDeltaTime;
         }
         acc -= acc * friction * Time.fixedDeltaTime;
-
-        /*
-        if (cached) {
-            cacheTimer += Time.fixedDeltaTime;
-            if (cacheTimer >= cacheLimit) {
-                cached = false;
-                cacheTimer = 0f;
-            }
-        }
-        */
     }
 
     public void ApplyForce(Vector3 force) {
@@ -72,20 +60,16 @@ public class Ball : MonoBehaviour
 
     void OnCollisionEnter(Collision collision) {
         GameObject obj = collision.gameObject;
-        /*
-        if (!cached || (!obj.CompareTag("Untagged") && cachedCollision.gameObject != obj)) {
-            cachedCollision = collision;
-        }
-        Vector3 normal = cachedCollision.GetContact(0).normal;
-        */
-
         Vector3 normal;
+
         for (int i = 0; i < collision.contactCount; i++) {
             normal = collision.GetContact(i).normal;
 
+            // Ball bounces off if it hits a bumper
             if (obj.CompareTag("Bumper")) {
                 vel = Vector3.Reflect(vel, normal);
             }
+            // Otherwise, movement in the direction of the obstacle is cancelled out; "equal and opposite reaction"
             else if (!obj.CompareTag("Untagged")) {
                 vel -= Vector3.Dot(vel, normal) * normal;
                 acc -= Vector3.Dot(acc, normal) * normal;
@@ -93,14 +77,16 @@ public class Ball : MonoBehaviour
         }
     }
 
+    // For the scenarios where the obstacle is below the ball, so that it doesn't fall through
     void OnCollisionStay(Collision collision) {
         if (collision.gameObject.CompareTag("Plunger")) {
             acc = Vector3.zero;
             //vel = Vector3.zero; // may cause plunger to be "sticky", where it charges up but doesn't launch
         }
+        // Roll along the wall
         else if (collision.gameObject.CompareTag("Wall")) {
             Vector3 normal;
-
+            
             for (int i = 0; i < collision.contactCount; i++) {
                 normal = collision.GetContact(i).normal;
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));

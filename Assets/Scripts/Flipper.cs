@@ -50,6 +50,7 @@ public class Flipper : MonoBehaviour
         }
 
         // Apply force to the ball if it is on the flipper
+        // Should make force and angle variable depending on where and when the ball is hit during the flipper motion
         if (Input.GetButtonDown(buttonName) && !_lock && trigger.ball != null) {
             trigger.ball.ApplyForce(Vector3.forward * 1f);
             _lock = true;
