@@ -20,6 +20,6 @@ public class Control : MonoBehaviour
     public void ResetTheGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        print("The button is working");
+        //print("The button is working");
     }
 }

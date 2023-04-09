@@ -6,9 +6,9 @@ using UnityEngine.SceneManagement;
 public class Ball : MonoBehaviour
 {
     [SerializeField] Vector3 endGameCoord;
-    [SerializeField] float gravity = -9.8f;
-    [SerializeField] float tableAngle = 7f; // the angle at which the table slants forward
-    [SerializeField] Transform table;
+    [SerializeField] public float gravity = -9.8f;
+    [SerializeField] public float tableAngle = 7f; // the angle at which the table slants forward
+    [SerializeField] public Transform table;
 
     static float mass = 0.08f;
     static float friction = 0.1f;
@@ -20,13 +20,14 @@ public class Ball : MonoBehaviour
     void Start() {
         gravity *= Mathf.Sin(Mathf.Deg2Rad * tableAngle); // use the component of gravity in the direction parallel to the table
         grav = new Vector3(0, 0, gravity);
-        vel = new Vector3(0, 0, -1.5f);
+        //vel = new Vector3(0, 0, -1.5f);
+        vel = Vector3.zero;
     }
 
     void Update()
     {
         if ((transform.position.z - endGameCoord.z) <= 0){
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 
