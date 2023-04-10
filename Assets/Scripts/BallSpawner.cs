@@ -18,39 +18,27 @@ public class BallSpawner : MonoBehaviour
         SpawnBall();
     }
 
-    void Update()
-    {
-        if (currentBall == null)
-        {
-            SpawnBall();
-        }
-    }
-
     void SpawnBall()
     {
         UnityEngine.Debug.Log("Spawning ball");
-        // Check if there are any balls in the game
-        if (GameObject.FindGameObjectsWithTag("Ball").Length == 0 && currentBall == null && Health.health > 0)
-        {
-            // Instantiate a new ball from the ballPrefab
-            GameObject newBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
-            Ball ballScript = newBall.GetComponent<Ball>();
-            ballScript.gravity = gravity;
-            ballScript.tableAngle = tableAngle;
-            ballScript.table = Camera.main.transform;
-            newBall.tag = "Ball";
+        // Instantiate a new ball from the ballPrefab
+        GameObject newBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
+        Ball ballScript = newBall.GetComponent<Ball>();
+        ballScript.gravity = gravity;
+        ballScript.tableAngle = tableAngle;
+        ballScript.table = Camera.main.transform;
+        newBall.tag = "Ball";
 
-            // Disable gravity and enable kinematic on the ball's Rigidbody component
-            // Note: We should not be using Unity's Rigidbody at all
-            Rigidbody ballRigidbody = newBall.GetComponent<Rigidbody>();
-            ballRigidbody.useGravity = false;
-            ballRigidbody.isKinematic = true;
+        // Disable gravity and enable kinematic on the ball's Rigidbody component
+        // Note: We should not be using Unity's Rigidbody at all
+        Rigidbody ballRigidbody = newBall.GetComponent<Rigidbody>();
+        ballRigidbody.useGravity = false;
+        ballRigidbody.isKinematic = true;
 
 
-            // Set the current ball to the newly spawned ball
-            currentBall = newBall;
-        }
-}
+        // Set the current ball to the newly spawned ball
+        currentBall = newBall;
+    }
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -61,6 +49,11 @@ public class BallSpawner : MonoBehaviour
             UnityEngine.Debug.Log("Destroying ball");
             Destroy(collision.gameObject);
             currentBall = null;
+
+            // Check if there are any balls in the game
+            if (GameObject.FindGameObjectsWithTag("Ball").Length == 0 && Health.health > 0) {
+                SpawnBall();
+            }
         }
     }
 }
