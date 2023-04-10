@@ -10,7 +10,7 @@ public class FollowBall : MonoBehaviour
     [SerializeField] Transform target;
     [SerializeField] float smoothSpeed = 0.125f;
     [SerializeField] Vector3 offset;
-    //ublic GameObject toggler;
+    //public GameObject toggler;
     public Toggle toggler;
     private Toggle m_Toggle;
     bool follow = false;

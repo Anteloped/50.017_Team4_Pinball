@@ -6,12 +6,11 @@ using UnityEngine;
 
 public class BallSpawner : MonoBehaviour
 {
-    /*
     public GameObject ballPrefab;
     public Vector3 spawnPosition;
 
     private GameObject currentBall;
-    [SerializeField] float gravity = -9.8f;
+    [SerializeField] float gravity = -10f;
     [SerializeField] float tableAngle = 7f;
 
     void Start()
@@ -31,7 +30,7 @@ public class BallSpawner : MonoBehaviour
     {
         UnityEngine.Debug.Log("Spawning ball");
         // Check if there are any balls in the game
-        if (GameObject.FindGameObjectsWithTag("Ball").Length == 0 && currentBall == null)
+        if (GameObject.FindGameObjectsWithTag("Ball").Length == 0 && currentBall == null && Health.health > 0)
         {
             // Instantiate a new ball from the ballPrefab
             GameObject newBall = Instantiate(ballPrefab, spawnPosition, Quaternion.identity);
@@ -42,6 +41,7 @@ public class BallSpawner : MonoBehaviour
             newBall.tag = "Ball";
 
             // Disable gravity and enable kinematic on the ball's Rigidbody component
+            // Note: We should not be using Unity's Rigidbody at all
             Rigidbody ballRigidbody = newBall.GetComponent<Rigidbody>();
             ballRigidbody.useGravity = false;
             ballRigidbody.isKinematic = true;
@@ -55,7 +55,7 @@ public class BallSpawner : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         UnityEngine.Debug.Log("OnCollisionEnter called");
-        if (collision.gameObject.CompareTag("Ball") && collision.gameObject.CompareTag("Ball"))
+        if (collision.gameObject.CompareTag("Ball"))
         {
             Health.health--;
             UnityEngine.Debug.Log("Destroying ball");
@@ -63,6 +63,5 @@ public class BallSpawner : MonoBehaviour
             currentBall = null;
         }
     }
-    */
 }
 

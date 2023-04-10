@@ -8,10 +8,11 @@ public class Ball : MonoBehaviour
     [SerializeField] Vector3 endGameCoord;
     float maxFallSpeed = -10f;
     float maxFallAcc = -10f;
-    [SerializeField] float gravity = -10f;
-    //[SerializeField] float tableAngle = 7f; // the angle at which the table slants forward
-    [SerializeField] Transform table;
-    [SerializeField] int lives = 3;
+
+    public float gravity = -10f;
+    public float tableAngle = 7f; // the angle at which the table slants forward
+    public Transform table;
+    //[SerializeField] int lives = 3;
 
     static float mass = 0.08f;
     static float friction = 0.01f;
@@ -23,21 +24,23 @@ public class Ball : MonoBehaviour
     bool launched = false;
     bool flipped = false;
     Vector3 flipperNormal;
+    Vector3 flipperPoint;
     Vector3 startPos;
 
     void Start() {
-        startPos = transform.position;
+        //startPos = transform.position;
         Init();
     }
     
     void Init() {
-        transform.position = startPos;
+        //transform.position = startPos;
         //gravity *= Mathf.Sin(Mathf.Deg2Rad * tableAngle); // use the component of gravity in the direction parallel to the table
         grav = new Vector3(0, 0, gravity);
         vel = new Vector3(0, 0, -1.5f);
         acc = Vector3.zero;
     }
 
+    /*
     void Update()
     {
         if ((transform.position.z - endGameCoord.z) <= 0){
@@ -48,6 +51,7 @@ public class Ball : MonoBehaviour
             }
         }
     }
+    */
 
     void FixedUpdate() {
         // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
@@ -82,9 +86,10 @@ public class Ball : MonoBehaviour
     }
 
     // Rudimentary, need to apply torque and not linear force
-    public void Flip(float force) {
+    public void Flip(float force, Vector3 jointPos) {
         Vector3 F = force * flipperNormal;
-        Vector3 torque = F;
+        Vector3 r = flipperPoint - jointPos;
+        Vector3 torque = Vector3.Cross(r, F);
         ApplyForce(torque);
         flipped = true;
     }
@@ -146,6 +151,7 @@ public class Ball : MonoBehaviour
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));
                 if (obj.CompareTag("Flipper")) {
                     flipperNormal = normal;
+                    flipperPoint = collision.GetContact(i).point;
                 }
             }
         }
@@ -156,5 +162,6 @@ public class Ball : MonoBehaviour
         launched = false;
         flipped = false;
         flipperNormal = Vector3.zero;
+        flipperPoint = Vector3.zero;
     }
 }

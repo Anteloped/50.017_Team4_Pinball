@@ -54,7 +54,7 @@ public class Flipper : MonoBehaviour
         if (Input.GetButtonDown(buttonName) && trigger.ball != null) {
             float force = 1.0f - flipTimer / flipTime;
             if (force > 0.0f) {
-                trigger.ball.Flip(force);
+                trigger.ball.Flip(force, transform.position);
             }
         }
     }
