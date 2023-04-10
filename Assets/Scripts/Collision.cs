@@ -20,7 +20,7 @@ public class Collision: MonoBehaviour
     }
 
     // checks collision between ball and the specified collidingObject, then updates the ball accordingly
-    void collide(GameObject collidingObject)
+    public void collide(GameObject collidingObject)
     {
         GameObject ball = GameObject.Find("Ball");
         Ball ballScript = ball.GetComponent<Ball>();
