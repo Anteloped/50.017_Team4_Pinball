@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -166,5 +167,15 @@ public class Ball : MonoBehaviour
         flipped = false;
         flipperNormal = Vector3.zero;
         flipperPoint = Vector3.zero;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return vel;
+    }
+
+    public void setVelocity(Vector3 newVelocity)
+    {
+        vel = newVelocity;
     }
 }
