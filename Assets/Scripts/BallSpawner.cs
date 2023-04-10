@@ -45,13 +45,13 @@ public class BallSpawner : MonoBehaviour
         UnityEngine.Debug.Log("OnCollisionEnter called");
         if (collision.gameObject.CompareTag("Ball"))
         {
-            Health.health--;
+            Health.Instance.health--;
             UnityEngine.Debug.Log("Destroying ball");
             Destroy(collision.gameObject);
             currentBall = null;
 
             // Check if there are any balls in the game
-            if (GameObject.FindGameObjectsWithTag("Ball").Length == 0 && Health.health > 0) {
+            if (Health.Instance.health > 0) { // GameObject.FindGameObjectsWithTag("Ball").Length == 0 && 
                 SpawnBall();
             }
         }

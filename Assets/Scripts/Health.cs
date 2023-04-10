@@ -7,7 +7,10 @@ using TMPro;
 
 public class Health : MonoBehaviour
 {
-    public static int health = 3;
+    public static Health Instance;
+
+    public int maxHealth = 3;
+    public int health;
     public int numOfHearts;
 
     public Image[] hearts;
@@ -15,10 +18,20 @@ public class Health : MonoBehaviour
     public Sprite emptyHeart;
 
     public TextMeshProUGUI gameOverText;
+
+    void Awake() {
+        if (Instance != null && Instance != this) {
+            Destroy(this);
+        }
+        else {
+            Instance = this;
+        }
+    }
     
     // Start is called before the first frame update
     void Start()
     {
+        health = maxHealth;
         gameOverText.enabled = false;
     }
 
@@ -57,6 +70,15 @@ public class Health : MonoBehaviour
             {
                 hearts[i].enabled = false;
             }
+        }
+    }
+
+    public void Reset() {
+        health = maxHealth;
+        gameOverText.enabled = false;
+        gameOverText.gameObject.SetActive(false);
+        for (int i = 0; i < hearts.Length; i++) {
+            hearts[i].enabled = true;
         }
     }
 }

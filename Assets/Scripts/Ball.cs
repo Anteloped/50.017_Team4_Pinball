@@ -15,7 +15,7 @@ public class Ball : MonoBehaviour
     //[SerializeField] int lives = 3;
 
     static float mass = 0.08f;
-    static float friction = 0.01f;
+    static float friction = 0.1f;
     static float radius = 0.16f;
     Vector3 vel;
     Vector3 acc;
@@ -25,7 +25,7 @@ public class Ball : MonoBehaviour
     bool flipped = false;
     Vector3 flipperNormal;
     Vector3 flipperPoint;
-    Vector3 startPos;
+    //Vector3 startPos;
 
     void Start() {
         //startPos = transform.position;
@@ -55,7 +55,7 @@ public class Ball : MonoBehaviour
 
     void FixedUpdate() {
         // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
-        grav = new Vector3(gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad), 0, gravity);
+        grav.x = gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad);
 
         // Update ball position
         Vector3 pos = transform.position;
@@ -87,6 +87,9 @@ public class Ball : MonoBehaviour
 
     // Rudimentary, need to apply torque and not linear force
     public void Flip(float force, Vector3 jointPos) {
+        if (flipperNormal.z < 0) {
+            flipperNormal *= -1;
+        }
         Vector3 F = force * flipperNormal;
         Vector3 r = flipperPoint - jointPos;
         Vector3 torque = Vector3.Cross(r, F);

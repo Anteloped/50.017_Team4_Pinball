@@ -22,7 +22,7 @@ public class FollowBall : MonoBehaviour
     void Start()
     {
         //GameObject cameraObject = GameObject.Find(cameraName);
-        m_Toggle = toggler.GetComponent<Toggle>();
+        m_Toggle = toggler;//.GetComponent<Toggle>();
         if (m_Toggle != null)
         {
             m_Toggle.isOn = false;
