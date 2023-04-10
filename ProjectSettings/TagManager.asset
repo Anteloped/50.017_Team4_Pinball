@@ -10,6 +10,7 @@ TagManager:
   - Plunger
   - Bound
   - Flipper
+  - Cube
   layers:
   - Default
   - TransparentFX
