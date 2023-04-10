@@ -11,9 +11,7 @@ public class Flipper : MonoBehaviour
     [SerializeField] FlipperTrigger trigger;
     Quaternion initialOrientation;
     Vector3 initialAngles;
-    bool _lock = false;
-    float timer = 0f;
-    float lockTimer = 0.5f;
+    float flipTimer = 0.0f;
     
     // Start is called before the first frame update
     void Start()
@@ -28,6 +26,7 @@ public class Flipper : MonoBehaviour
         {
             // Rotate the flipper
             transform.Rotate(Vector3.up * maxAngle / flipTime * Time.deltaTime);
+            flipTimer += Time.deltaTime;
             Vector3 angles = transform.rotation.eulerAngles;
             if (!isLeftSide && angles.y - initialAngles.y >= maxAngle)
             {
@@ -40,6 +39,7 @@ public class Flipper : MonoBehaviour
         // Return flipper to default position
         else if (transform.rotation.eulerAngles.y != initialAngles.y) {
             transform.Rotate(Vector3.up * -maxAngle / flipTime * Time.deltaTime);
+            flipTimer = 0.0f;
             Vector3 angles = transform.rotation.eulerAngles;
             if (isLeftSide && angles.y <= -maxAngle) {
                 transform.rotation = Quaternion.Euler(initialAngles);
@@ -50,20 +50,11 @@ public class Flipper : MonoBehaviour
         }
 
         // Apply force to the ball if it is on the flipper
-        // Should make force and angle variable depending on where and when the ball is hit during the flipper motion
-        if (Input.GetButtonDown(buttonName) && !_lock && trigger.ball != null) {
-            trigger.ball.ApplyForce(Vector3.forward * 1f);
-            _lock = true;
-        }
-    }
-
-    void FixedUpdate() {
-        // Timed lock to prevent force from being applied repeatedly every frame
-        if (_lock) {
-            timer += Time.fixedDeltaTime;
-            if (timer >= lockTimer) {
-                timer = 0f;
-                _lock = false;
+        // Need to compute torque, and don't let the ball clip through during flipping motion
+        if (Input.GetButtonDown(buttonName) && trigger.ball != null) {
+            float force = 1.0f - flipTimer / flipTime;
+            if (force > 0.0f) {
+                trigger.ball.Flip(force);
             }
         }
     }

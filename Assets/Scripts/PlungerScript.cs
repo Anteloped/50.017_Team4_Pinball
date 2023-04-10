@@ -50,7 +50,7 @@ public class PlungerScript : MonoBehaviour
                     power = minPower;
                 }
                 
-                ball.ApplyForce(power * Vector3.forward);
+                ball.Launch(power);
             }
         }
         else

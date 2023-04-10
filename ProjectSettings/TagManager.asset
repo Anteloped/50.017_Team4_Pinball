@@ -9,6 +9,7 @@ TagManager:
   - Bumper
   - Plunger
   - Bound
+  - Flipper
   layers:
   - Default
   - TransparentFX
