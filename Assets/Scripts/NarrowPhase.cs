@@ -5,7 +5,7 @@ using System.Runtime.Serialization.Formatters;
 using UnityEngine;
 
 // narrow phase of collision detection
-public class Collision: MonoBehaviour
+public class NarrowPhase: MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
