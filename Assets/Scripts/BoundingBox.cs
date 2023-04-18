@@ -37,17 +37,19 @@ public class BoundingBox : MonoBehaviour
     void Update()
     {
         ball = GameObject.FindGameObjectWithTag("Ball");
-        ballScript = ball.GetComponent<Ball>();
+        if (ball != null) {
+            ballScript = ball.GetComponent<Ball>();
 
-        for (int i = 0; i <= 3; i++)
-        {
-           if (ballInsideBox(ballScript, boxes[i]))
-           {
-               foreach (GameObject obj in box_obj[i])
-               {
-                   collision_check.collide(obj);
-               }
-           }
+            for (int i = 0; i <= 3; i++)
+            {
+                if (ballInsideBox(ballScript, boxes[i]))
+                {
+                    foreach (GameObject obj in box_obj[i])
+                    {
+                        collision_check.collide(obj);
+                    }
+                }
+            }
         }
     }
 
