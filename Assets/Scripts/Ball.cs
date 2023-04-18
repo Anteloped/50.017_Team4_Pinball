@@ -165,7 +165,7 @@ public class Ball : MonoBehaviour
 
             // Ball bounces off if it hits a bumper
             if (obj.CompareTag("Bumper")) {
-                //vel = Vector3.Reflect(vel, normal);
+                // ignore
             }
             else if (obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
             {
