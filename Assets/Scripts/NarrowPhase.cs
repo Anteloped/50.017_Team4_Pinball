@@ -94,7 +94,6 @@ public class NarrowPhase : MonoBehaviour
             case "Deflector":
                 break;
         }
-
         // check collision with bumpers
         if (collidingObject.tag == "Bumper")
         {
@@ -120,7 +119,6 @@ public class NarrowPhase : MonoBehaviour
                 }
             }
         }
-
         // check collision with flippers:
     }
 }

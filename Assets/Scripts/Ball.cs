@@ -232,4 +232,14 @@ public class Ball : MonoBehaviour
     {
         this.vel = velocity;
     }
+
+    public Vector3 getVelocity()
+    {
+        return vel;
+    }
+
+    public void setVelocity(Vector3 newVelocity)
+    {
+        vel = newVelocity;
+    }
 }
