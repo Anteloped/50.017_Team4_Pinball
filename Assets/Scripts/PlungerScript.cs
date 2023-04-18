@@ -8,21 +8,24 @@ using UnityEngine.UI;
 
 public class PlungerScript : MonoBehaviour
 {
-    float power;
-    [SerializeField] float minPower = 0f;
-    [SerializeField] float maxPower = 10f;
-    [SerializeField] Slider powerSlider;
+    //float power;
+    float minPower = 0.75f;
+    float maxPower = 1.0f;
+    //[SerializeField] Slider powerSlider;
     Ball ball;
-    bool ballReady;
+    //bool ballReady;
 
     void Start()
     {
+        /*
         powerSlider.minValue = 0f;
         powerSlider.maxValue = maxPower;
+        */
     }
 
     void Update()
     {
+        /*
         if (ballReady)
         {
             powerSlider.gameObject.SetActive(true);
@@ -33,8 +36,10 @@ public class PlungerScript : MonoBehaviour
         }
 
         powerSlider.value = power;
+        */
         if(ball != null)
         {
+            /*
             ballReady = true;
             if (Input.GetKey(KeyCode.Space))
             {
@@ -44,7 +49,7 @@ public class PlungerScript : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 if (power < minPower) {
                     power = minPower;
@@ -52,12 +57,18 @@ public class PlungerScript : MonoBehaviour
                 
                 ball.Launch(power);
             }
+            */
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                ball.Launch(Random.Range(minPower, maxPower));
+            }
         }
+        /*
         else
         {
             ballReady= false;
             power = 0f;
         }
+        */
     }
 
     private void OnTriggerEnter(Collider other)
@@ -73,7 +84,7 @@ public class PlungerScript : MonoBehaviour
         if (other.gameObject.CompareTag("Ball"))
         {
             ball = null;
-            power = 0f;
+            //power = 0f;
         }
     }
 }
