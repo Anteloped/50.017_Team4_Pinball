@@ -144,7 +144,7 @@ public class Ball : MonoBehaviour
             transform.position += Vector3.forward * 0.25f * spaceMul;
         }
     }
-
+    
     void OnCollisionEnter(Collision collision) {
         GameObject obj = collision.gameObject;
         ContactPoint contact;
@@ -160,10 +160,7 @@ public class Ball : MonoBehaviour
             }
 
             // Ball bounces off if it hits a bumper
-            if (obj.CompareTag("Bumper")) {
-                // ignore
-            }
-            else if (obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
+            if (obj.CompareTag("Bumper") || obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
             {
                 // ignore
             }

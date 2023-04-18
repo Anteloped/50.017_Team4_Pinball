@@ -7,17 +7,7 @@ using UnityEngine;
 // narrow phase of collision detection
 public class NarrowPhase : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
+    int scoreValue = 1;
 
     // checks collision between ball and the specified collidingObject, then updates the ball accordingly
     public void collide(GameObject collidingObject)
@@ -125,6 +115,8 @@ public class NarrowPhase : MonoBehaviour
                     ballVelocity = Vector3.Reflect(ballVelocity, bumperNormal);
                     ballVelocity += (bumperPower * bumperNormal);
                     ballScript.setVelocity(ballVelocity);
+
+                    ScoreManager.instance.AddPoint(scoreValue);
                 }
             }
         }
