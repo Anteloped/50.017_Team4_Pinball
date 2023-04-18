@@ -10,7 +10,7 @@ public class Parameters : MonoBehaviour
     void Start()
     {
         // initialize values for the parameters
-        bumperPower = 5.0f;
+        bumperPower = 2.0f;
     }
 
     // Update is called once per frame
