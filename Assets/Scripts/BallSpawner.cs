@@ -40,6 +40,15 @@ public class BallSpawner : MonoBehaviour
         currentBall = newBall;
     }
 
+    IEnumerator respawn() {
+        yield return new WaitForSeconds(1);
+
+        // Check if there are any balls in the game
+        if (Health.Instance.health > 0) { // GameObject.FindGameObjectsWithTag("Ball").Length == 0 && 
+            SpawnBall();
+        }
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         UnityEngine.Debug.Log("OnCollisionEnter called");
@@ -50,10 +59,7 @@ public class BallSpawner : MonoBehaviour
             Destroy(collision.gameObject);
             currentBall = null;
 
-            // Check if there are any balls in the game
-            if (Health.Instance.health > 0) { // GameObject.FindGameObjectsWithTag("Ball").Length == 0 && 
-                SpawnBall();
-            }
+            StartCoroutine(respawn());
         }
     }
 }
