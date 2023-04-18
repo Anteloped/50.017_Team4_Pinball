@@ -18,6 +18,12 @@ public class BallSpawner : MonoBehaviour
         SpawnBall();
     }
 
+    void Update() {
+        if (currentBall.transform.position.z < -8) {
+            DestroyBall();
+        }
+    }
+
     void SpawnBall()
     {
         UnityEngine.Debug.Log("Spawning ball");
@@ -31,16 +37,24 @@ public class BallSpawner : MonoBehaviour
 
         // Disable gravity and enable kinematic on the ball's Rigidbody component
         // Note: We should not be using Unity's Rigidbody at all
-        Rigidbody ballRigidbody = newBall.GetComponent<Rigidbody>();
-        ballRigidbody.useGravity = false;
-        ballRigidbody.isKinematic = true;
+        //Rigidbody ballRigidbody = newBall.GetComponent<Rigidbody>();
+        //ballRigidbody.useGravity = false;
+        //ballRigidbody.isKinematic = true;
 
 
         // Set the current ball to the newly spawned ball
         currentBall = newBall;
     }
 
-    IEnumerator respawn() {
+    void DestroyBall() {
+        Health.Instance.health--;
+        Destroy(currentBall);
+        currentBall = null;
+
+        StartCoroutine(Respawn());
+    }
+
+    IEnumerator Respawn() {
         yield return new WaitForSeconds(1);
 
         // Check if there are any balls in the game
@@ -59,7 +73,7 @@ public class BallSpawner : MonoBehaviour
             Destroy(collision.gameObject);
             currentBall = null;
 
-            StartCoroutine(respawn());
+            StartCoroutine(Respawn());
         }
     }
 }
