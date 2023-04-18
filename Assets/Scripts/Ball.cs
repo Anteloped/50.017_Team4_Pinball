@@ -145,7 +145,7 @@ public class Ball : MonoBehaviour
                 transform.position = contact.point + normal * radius;
             }
 
-            // Ball bounces off if it hits a bumper
+            // Ball bounces off if it hits a bumper or wall
             if (obj.CompareTag("Bumper") || obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
             {
                 // ignore
