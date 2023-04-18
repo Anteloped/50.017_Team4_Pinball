@@ -73,3 +73,5 @@ crashlytics-build.properties
 Assets/PinballScene.unity
 
 Pinball_Data/*
+
+ProjectSettings/Packages/com.unity.testtools.codecoverage/Settings.json
