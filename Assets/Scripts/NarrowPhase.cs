@@ -27,7 +27,7 @@ public class NarrowPhase : MonoBehaviour
 
         Vector3 ballPosition = ball.transform.position;
         Vector3 ballVelocity = ballScript.getVelocity();
-        float ballRadius = ball.transform.localScale[0] / 2 - 0.1f;
+        float ballRadius = ball.transform.localScale[0] / 2 - 0.05f;
 
         Vector3 collidingObjectPosition = collidingObject.transform.position;
 
@@ -60,9 +60,9 @@ public class NarrowPhase : MonoBehaviour
                     float wall_thickness = collidingObject.transform.localScale[0] / 2;
 
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness)
+                    if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness + 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.85f;
+                        ballVelocity[0] = -ballVelocity[0] * 0.7f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -76,9 +76,9 @@ public class NarrowPhase : MonoBehaviour
                     float wall_thickness = collidingObject.transform.localScale[0] / 2;
 
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness)
+                    if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness - 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.85f;
+                        ballVelocity[0] = -ballVelocity[0] * 0.7f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -114,8 +114,8 @@ public class NarrowPhase : MonoBehaviour
             if (Vector3.Dot(ballVelocity, bumperDirection) > 0)
             {
                 // check the distance to see if the collision occurred
-                float bumperDistance = bumperDirection.magnitude - ballRadius;
-                float bumperRadius = collidingObject.transform.localScale[0];
+                float bumperDistance = bumperDirection.magnitude;
+                float bumperRadius = collidingObject.transform.localScale[0] - 0.15f;
 
                 if (bumperDistance < bumperRadius)
                 {
