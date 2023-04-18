@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 //using UnityEngine.SceneManagement;
 using UnityEngine.Animations;
@@ -28,6 +29,10 @@ public class Ball : MonoBehaviour
     //Vector3 startPos;
     //SphereCast1 sc;
 
+    NarrowPhase check_and_apply_collision;
+    List<GameObject> bumpers;
+    List<GameObject> walls;
+
     void Start() {
         //startPos = transform.position;
         Init();
@@ -40,6 +45,21 @@ public class Ball : MonoBehaviour
         vel = new Vector3(0, 0, -1.5f);
         acc = Vector3.zero;
         //sc = GetComponentsInChildren<SphereCast1>()[0];
+
+        check_and_apply_collision = GameObject.Find("PlayArea").GetComponent<NarrowPhase>();
+
+        bumpers = new List<GameObject>();
+
+        for (int i = 1; i <= 7; i++)
+        {
+            bumpers.Add(GameObject.Find("Bumper" + i.ToString()));
+        }
+
+        walls = new List<GameObject>();
+
+        walls.Add(GameObject.Find("TopBoundary"));
+        walls.Add(GameObject.Find("LeftBound"));
+        walls.Add(GameObject.Find("RightBound"));
     }
 
     /*
@@ -79,6 +99,19 @@ public class Ball : MonoBehaviour
         transform.position = pos;
 
         //sc.ChangeScale(vel * Time.fixedDeltaTime);
+
+        // collision with bumpers
+        foreach (GameObject bumper in bumpers)
+        {
+            check_and_apply_collision.collide(bumper);
+        }
+
+        // collision with TopBoundary, LeftBound and RightBound
+        foreach (GameObject wall in walls)
+        {
+            check_and_apply_collision.collide(wall);
+        }
+        
     }
 
     // For plunger
@@ -128,7 +161,11 @@ public class Ball : MonoBehaviour
 
             // Ball bounces off if it hits a bumper
             if (obj.CompareTag("Bumper")) {
-                vel = Vector3.Reflect(vel, normal);
+                //vel = Vector3.Reflect(vel, normal);
+            }
+            else if (obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
+            {
+                // ignore
             }
             // Ball stops moving when it is on the plunger
             else if(obj.CompareTag("Plunger")) {
@@ -148,29 +185,35 @@ public class Ball : MonoBehaviour
     }
 
     // For the scenarios where the obstacle is below the ball, so that it doesn't fall through
-    void OnCollisionStay(Collision collision) {
+    void OnCollisionStay(Collision collision)
+    {
         GameObject obj = collision.gameObject;
         rolling = true;
 
         // Prevent ball from falling through the plunger
-        if (obj.CompareTag("Plunger") && !launched) {
+        if (obj.CompareTag("Plunger") && !launched)
+        {
             acc.z = 0;
             vel.z = 0;
         }
         // Roll along the wall
-        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper"))) {
-            Vector3 normal;   
-            for (int i = 0; i < collision.contactCount; i++) {
+        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper")))
+        {
+            Vector3 normal;
+            for (int i = 0; i < collision.contactCount; i++)
+            {
                 ContactPoint contact = collision.GetContact(i);
                 normal = contact.normal;
 
                 // Prevent clipping
-                if (contact.separation < radius) {
+                if (contact.separation < radius)
+                {
                     transform.position = contact.point + normal * radius;
                 }
                 //normal = collision.GetContact(i).normal;
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));
-                if (obj.CompareTag("Flipper")) {
+                if (obj.CompareTag("Flipper"))
+                {
                     flipperPoint = collision.GetContact(i).point;
                     //flipperNormal = normal;
                 }
@@ -181,5 +224,15 @@ public class Ball : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         rolling = false;
         launched = false;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return vel;
+    }
+
+    public void setVelocity(Vector3 velocity)
+    {
+        this.vel = velocity;
     }
 }
