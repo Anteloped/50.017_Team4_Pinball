@@ -33,12 +33,12 @@ public class BoundingBox : MonoBehaviour
 
         objects = GetAllChildren(table);
         Boxes = new List<BoundingBox>();
-        box.Split(Boxes);
+        //box.Split(Boxes);
 
-        Debug.Log("Box count");
-        Debug.Log(Boxes.Count);
+        //Debug.Log("Box count");
+        //Debug.Log(Boxes.Count);
 
-        objInBox(objects, Boxes);
+        //objInBox(objects, Boxes);
 
         collision_check = table.AddComponent<NarrowPhase>();
     }
@@ -46,8 +46,8 @@ public class BoundingBox : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ball = GameObject.FindGameObjectWithTag("Ball");
-        ballScript = ball.GetComponent<Ball>();
+        //ball = GameObject.FindGameObjectWithTag("Ball");
+        //ballScript = ball.GetComponent<Ball>();
 
         //for (int i = 0; i <= 3; i++)
         //{

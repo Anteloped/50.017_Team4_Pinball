@@ -13,8 +13,7 @@ public class NarrowPhase : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        ball = GameObject.Find("Ball");
-        ballScript = ball.GetComponent<Ball>();
+        
     }
 
     // Update is called once per frame
@@ -27,6 +26,9 @@ public class NarrowPhase : MonoBehaviour
     public void collide(GameObject collidingObject)
     {
         Debug.Log("collision function called");
+
+        GameObject ball = GameObject.Find("Ball");
+        Ball ballScript = ball.GetComponent<Ball>();
 
         Vector3 ballPosition = ball.transform.position;
         Vector3 ballVelocity = ballScript.getVelocity();
