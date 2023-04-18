@@ -73,8 +73,9 @@ public class BoundingBox : MonoBehaviour
     public bool ballInsideBox(Ball ball, GameObject b)
     {
         MeshRenderer renderer = b.GetComponent<MeshRenderer>();
-        if (ball.transform.position.x >= renderer.bounds.min.x && ball.transform.position.x <=renderer.bounds.max.x &&
-        ball.transform.position.z >= renderer.bounds.min.z && ball.transform.position.z <=renderer.bounds.max.z)
+        if (ball.transform.position.x >= renderer.bounds.min.x && ball.transform.position.x >=renderer.bounds.max.x &&
+        ball.transform.position.y >= renderer.bounds.min.y && ball.transform.position.y >= renderer.bounds.max.y &&
+        ball.transform.position.z >= renderer.bounds.min.z && ball.transform.position.z >=renderer.bounds.max.z)
         {
             return true;
         }
@@ -83,8 +84,9 @@ public class BoundingBox : MonoBehaviour
     public bool isInsideBox(GameObject o, GameObject b)
     {
         MeshRenderer renderer = b.GetComponent<MeshRenderer>();
-        if (o.transform.position.x >= renderer.bounds.min.x && o.transform.position.x <=renderer.bounds.max.x &&
-        o.transform.position.z >= renderer.bounds.min.z && o.transform.position.z <=renderer.bounds.max.z)
+        if (o.transform.position.x >= renderer.bounds.min.x && o.transform.position.x >=renderer.bounds.max.x &&
+        o.transform.position.y >= renderer.bounds.min.y && o.transform.position.y >= renderer.bounds.max.y &&
+        o.transform.position.z >= renderer.bounds.min.z && o.transform.position.z >=renderer.bounds.max.z)
         {
             return true;
         }
