@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 128982461}
   - component: {fileID: 128982460}
   m_Layer: 0
-  m_Name: Bumper1 (6)
+  m_Name: Bumper7
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -944,7 +944,7 @@ GameObject:
   - component: {fileID: 188505213}
   - component: {fileID: 188505212}
   m_Layer: 0
-  m_Name: Bumper1 (3)
+  m_Name: Bumper3
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1056,7 +1056,7 @@ GameObject:
   - component: {fileID: 216689016}
   - component: {fileID: 216689020}
   m_Layer: 0
-  m_Name: Bumper1 (2)
+  m_Name: Bumper5
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1602,7 +1602,7 @@ GameObject:
   - component: {fileID: 365518313}
   - component: {fileID: 365518312}
   m_Layer: 0
-  m_Name: Bumper1 (5)
+  m_Name: Bumper6
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2264,7 +2264,7 @@ GameObject:
   - component: {fileID: 667885867}
   - component: {fileID: 667885871}
   m_Layer: 0
-  m_Name: Bumper1 (1)
+  m_Name: Bumper2
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2698,6 +2698,7 @@ GameObject:
   - component: {fileID: 710814764}
   - component: {fileID: 710814766}
   - component: {fileID: 710814765}
+  - component: {fileID: 710814767}
   m_Layer: 0
   m_Name: PlayArea
   m_TagString: Table
@@ -2751,6 +2752,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   min: {x: 0, y: 0, z: 0}
   max: {x: 0, y: 0, z: 0}
+--- !u!114 &710814767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 710814763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16b2665e7251e34b8b19ec273f300e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &753556161
 GameObject:
   m_ObjectHideFlags: 0
@@ -4279,7 +4292,7 @@ GameObject:
   - component: {fileID: 1665420665}
   - component: {fileID: 1665420664}
   m_Layer: 0
-  m_Name: Bumper1 (4)
+  m_Name: Bumper4
   m_TagString: Bumper
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
