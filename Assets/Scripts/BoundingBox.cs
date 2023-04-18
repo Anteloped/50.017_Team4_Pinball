@@ -40,7 +40,7 @@ public class BoundingBox : MonoBehaviour
 
         objInBox(objects, Boxes);
 
-        collision_check = ball.AddComponent<NarrowPhase>();
+        collision_check = table.AddComponent<NarrowPhase>();
     }
     //collision_check.collide(obj,ball,ballScript);
     // Update is called once per frame
