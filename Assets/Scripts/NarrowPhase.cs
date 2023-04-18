@@ -52,7 +52,7 @@ public class NarrowPhase : MonoBehaviour
                     // check the x-coordinate to see if the collision occurred
                     if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness + 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.7f;
+                        ballVelocity[0] = -ballVelocity[0] * 0.55f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -68,7 +68,7 @@ public class NarrowPhase : MonoBehaviour
                     // check the x-coordinate to see if the collision occurred
                     if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness - 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.7f;
+                        ballVelocity[0] = -ballVelocity[0] * 0.55f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -94,6 +94,7 @@ public class NarrowPhase : MonoBehaviour
             case "Deflector":
                 break;
         }
+
         // check collision with bumpers
         if (collidingObject.tag == "Bumper")
         {
@@ -119,6 +120,7 @@ public class NarrowPhase : MonoBehaviour
                 }
             }
         }
+
         // check collision with flippers:
     }
 }
