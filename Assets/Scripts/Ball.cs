@@ -29,16 +29,16 @@ public class Ball : MonoBehaviour
     //Vector3 startPos;
     //SphereCast1 sc;
 
-    NarrowPhase check_and_apply_collision;
-    List<GameObject> bumpers;
-    List<GameObject> walls;
+    BroadPhase broadPhaseCollision;
 
-    void Start() {
+    void Start()
+    {
         //startPos = transform.position;
         Init();
     }
-    
-    void Init() {
+
+    void Init()
+    {
         //transform.position = startPos;
         //gravity *= Mathf.Sin(Mathf.Deg2Rad * tableAngle); // use the component of gravity in the direction parallel to the table
         grav = new Vector3(0, 0, gravity);
@@ -46,20 +46,7 @@ public class Ball : MonoBehaviour
         acc = Vector3.zero;
         //sc = GetComponentsInChildren<SphereCast1>()[0];
 
-        check_and_apply_collision = GameObject.Find("PlayArea").GetComponent<NarrowPhase>();
-
-        bumpers = new List<GameObject>();
-
-        for (int i = 1; i <= 7; i++)
-        {
-            bumpers.Add(GameObject.Find("Bumper" + i.ToString()));
-        }
-
-        walls = new List<GameObject>();
-
-        walls.Add(GameObject.Find("TopBoundary"));
-        walls.Add(GameObject.Find("LeftBound"));
-        walls.Add(GameObject.Find("RightBound"));
+        broadPhaseCollision = GameObject.Find("PlayArea").GetComponent<BroadPhase>();
     }
 
     /*
@@ -75,12 +62,14 @@ public class Ball : MonoBehaviour
     }
     */
 
-    void FixedUpdate() {
+    void FixedUpdate()
+    {
         // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
         grav.x = gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad);
 
         // Update ball acceleration
-        if (!rolling) {
+        if (!rolling)
+        {
             acc += grav * Time.fixedDeltaTime;
         }
         acc -= acc * friction * Time.fixedDeltaTime;
@@ -100,36 +89,29 @@ public class Ball : MonoBehaviour
 
         //sc.ChangeScale(vel * Time.fixedDeltaTime);
 
-        // collision with bumpers
-        foreach (GameObject bumper in bumpers)
-        {
-            check_and_apply_collision.collide(bumper);
-        }
-
-        // collision with TopBoundary, LeftBound and RightBound
-        foreach (GameObject wall in walls)
-        {
-            check_and_apply_collision.collide(wall);
-        }
-        
+        // check for collision with TopBoundary, LeftBound, RightBound and bumpers
+        broadPhaseCollision.collideWithNearby();
     }
 
     // For plunger
-    public void Launch(float force) {
+    public void Launch(float force)
+    {
         ApplyForce(force * Vector3.forward, -1.0f);
         launched = true;
     }
 
     // For flipper
     // Need to prevent ball from clipping through during flipping motion
-    public void Flip(float timeMul, Vector3 jointPos) {
+    public void Flip(float timeMul, Vector3 jointPos)
+    {
         Vector3 torque = 1.25f * Vector3.forward; //flipperNormal.normalized;
         float spaceMul = (flipperPoint - jointPos).magnitude / flipperLength;
         torque *= (timeMul + 0.25f) * spaceMul;
         ApplyForce(torque, spaceMul);
     }
 
-    void ApplyForce(Vector3 force, float spaceMul) {
+    void ApplyForce(Vector3 force, float spaceMul)
+    {
         acc *= 0.5f;
         vel *= 0.5f;
         acc += force / mass;
@@ -140,22 +122,26 @@ public class Ball : MonoBehaviour
         vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
 
         float displacement = 0.25f;
-        if (spaceMul > 0 && vel.magnitude < displacement) {
+        if (spaceMul > 0 && vel.magnitude < displacement)
+        {
             transform.position += Vector3.forward * 0.25f * spaceMul;
         }
     }
-    
-    void OnCollisionEnter(Collision collision) {
+
+    void OnCollisionEnter(Collision collision)
+    {
         GameObject obj = collision.gameObject;
         ContactPoint contact;
         Vector3 normal;
 
-        for (int i = 0; i < collision.contactCount; i++) {
+        for (int i = 0; i < collision.contactCount; i++)
+        {
             contact = collision.GetContact(i);
             normal = contact.normal;
 
             // Prevent clipping
-            if (contact.separation < radius) {
+            if (contact.separation < radius)
+            {
                 transform.position = contact.point + normal * radius;
             }
 
@@ -165,15 +151,18 @@ public class Ball : MonoBehaviour
                 // ignore
             }
             // Ball stops moving when it is on the plunger
-            else if(obj.CompareTag("Plunger")) {
+            else if (obj.CompareTag("Plunger"))
+            {
                 vel = Vector3.zero;
                 acc = Vector3.zero;
             }
             // Otherwise, movement in the direction of the obstacle is cancelled out; "equal and opposite reaction"
-            else if (!obj.CompareTag("Untagged")) {
+            else if (!obj.CompareTag("Untagged"))
+            {
                 vel -= Vector3.Dot(vel, normal) * normal;
                 acc -= Vector3.Dot(acc, normal) * normal;
-                if (obj.CompareTag("Flipper")) {
+                if (obj.CompareTag("Flipper"))
+                {
                     flipperPoint = contact.point;
                     //flipperNormal = normal;
                 }
@@ -218,7 +207,8 @@ public class Ball : MonoBehaviour
         }
     }
 
-    void OnCollisionExit(Collision collision) {
+    void OnCollisionExit(Collision collision)
+    {
         rolling = false;
         launched = false;
     }
