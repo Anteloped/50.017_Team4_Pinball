@@ -27,14 +27,15 @@ public class NarrowPhase : MonoBehaviour
     {
         Debug.Log("collision function called");
 
-        GameObject ball = GameObject.Find("Ball");
+        GameObject ball = GameObject.FindGameObjectWithTag("Ball");
         Ball ballScript = ball.GetComponent<Ball>();
 
         Vector3 ballPosition = ball.transform.position;
         Vector3 ballVelocity = ballScript.getVelocity();
-        // Vector3 ballMovement = ballVelocity * Time.fixedDeltaTime; // distance that the ball will move in the next update
 
         Vector3 collidingObjectPosition = collidingObject.transform.position;
+
+        Parameters parameters = GameObject.Find("PlayArea").GetComponent<Parameters>();
 
         float tolerance = 0.05f; // if the distance between objects falls below this tolerance, consider it as a collision
 
@@ -114,12 +115,12 @@ public class NarrowPhase : MonoBehaviour
             {
                 // check the distance to see if the collision occurred
                 float bumperDistance = bumperDirection.magnitude;
-                float bumperRadius = 0.5f; // assuming the bumper radius (SHOULD INSTEAD GET THE VALUE FROM THE OBJECT)
+                float bumperRadius = collidingObject.transform.localScale[0];
 
                 if (bumperDistance < bumperRadius + tolerance)
                 {
                     // assuming the bumper power (SHOULD INSTEAD GET THE VALUE FROM PLAYER-SELECTED GLOBAL PARAMETER)
-                    float bumperPower = 1.0f; // affects the velocity increase when the ball hits the bumper
+                    float bumperPower = parameters.getBumperPower(); // affects the velocity increase when the ball hits the bumper
                     Vector3 bumperNormal = -bumperDirection.normalized;
                     ballVelocity = Vector3.Reflect(ballVelocity, bumperNormal);
                     ballVelocity += (bumperPower * bumperNormal);
