@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 //using UnityEngine.SceneManagement;
 using UnityEngine.Animations;
@@ -130,7 +131,7 @@ public class Ball : MonoBehaviour
 
             // Ball bounces off if it hits a bumper
             if (obj.CompareTag("Bumper")) {
-                vel = Vector3.Reflect(vel, normal);
+                //vel = Vector3.Reflect(vel, normal);
             }
             // Ball stops moving when it is on the plunger
             else if(obj.CompareTag("Plunger")) {
@@ -183,5 +184,15 @@ public class Ball : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         rolling = false;
         launched = false;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return vel;
+    }
+
+    public void setVelocity(Vector3 velocity)
+    {
+        this.vel = velocity;
     }
 }
