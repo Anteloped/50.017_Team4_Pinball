@@ -91,7 +91,7 @@ public class Ball : MonoBehaviour
 
     // For plunger
     public void Launch(float force) {
-        ApplyForce(force * Vector3.forward);
+        ApplyForce(force * Vector3.forward, -1.0f);
         launched = true;
     }
 
@@ -101,17 +101,19 @@ public class Ball : MonoBehaviour
         Vector3 torque = 1.25f * Vector3.forward; //flipperNormal.normalized;
         float spaceMul = (flipperPoint - jointPos).magnitude / flipperLength;
         torque *= timeMul * spaceMul;
-        ApplyForce(torque);
+        ApplyForce(torque, spaceMul);
     }
 
-    void ApplyForce(Vector3 force) {
+    void ApplyForce(Vector3 force, float spaceMul) {
         acc += force / mass;
         acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
         acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
         vel += acc;
         vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
         vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
-        transform.position += Vector3.forward * Time.fixedDeltaTime;
+        if (spaceMul > 0) {
+            transform.position += Vector3.forward * 0.25f * spaceMul;
+        }
     }
 
     void OnCollisionEnter(Collision collision) {
