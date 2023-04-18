@@ -7,8 +7,6 @@ using UnityEngine;
 // narrow phase of collision detection
 public class NarrowPhase : MonoBehaviour
 {
-    float tolerance = 0.01f;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -29,7 +27,7 @@ public class NarrowPhase : MonoBehaviour
 
         Vector3 ballPosition = ball.transform.position;
         Vector3 ballVelocity = ballScript.getVelocity();
-        float ballRadius = ball.transform.localScale[0] / 2;
+        float ballRadius = ball.transform.localScale[0] / 2 - 0.1f;
 
         Vector3 collidingObjectPosition = collidingObject.transform.position;
 
@@ -46,7 +44,7 @@ public class NarrowPhase : MonoBehaviour
                     float wall_thickness = collidingObject.transform.localScale[1] / 2;
 
                     // check the z-coordinate to see if the collision occurred
-                    if (ballPosition[2] + ballRadius > collidingObjectPosition[2] - wall_thickness - tolerance)
+                    if (ballPosition[2] + ballRadius > collidingObjectPosition[2] - wall_thickness)
                     {
                         ballVelocity[2] = -ballVelocity[2];
                         ballScript.setVelocity(ballVelocity);
@@ -62,9 +60,9 @@ public class NarrowPhase : MonoBehaviour
                     float wall_thickness = collidingObject.transform.localScale[0] / 2;
 
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness + tolerance)
+                    if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness)
                     {
-                        ballVelocity[0] = -ballVelocity[0];
+                        ballVelocity[0] = -ballVelocity[0] * 0.85f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -78,9 +76,9 @@ public class NarrowPhase : MonoBehaviour
                     float wall_thickness = collidingObject.transform.localScale[0] / 2;
 
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness - tolerance)
+                    if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness)
                     {
-                        ballVelocity[0] = -ballVelocity[0];
+                        ballVelocity[0] = -ballVelocity[0] * 0.85f;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -119,7 +117,7 @@ public class NarrowPhase : MonoBehaviour
                 float bumperDistance = bumperDirection.magnitude - ballRadius;
                 float bumperRadius = collidingObject.transform.localScale[0];
 
-                if (bumperDistance < bumperRadius - tolerance)
+                if (bumperDistance < bumperRadius)
                 {
                     // assuming the bumper power (SHOULD INSTEAD GET THE VALUE FROM PLAYER-SELECTED GLOBAL PARAMETER)
                     float bumperPower = parameters.getBumperPower(); // affects the velocity increase when the ball hits the bumper
