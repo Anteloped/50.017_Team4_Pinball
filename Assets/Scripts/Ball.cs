@@ -2,14 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
+using UnityEngine.Animations;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] Vector3 endGameCoord;
-    float maxFallSpeed = -10f;
-    float maxFallAcc = -10f;
-
+    //[SerializeField] Vector3 endGameCoord;
+    float maxSpeed = 10f;
+    float maxAcc = 10f;
     public float gravity = -10f;
     public float tableAngle = 7f; // the angle at which the table slants forward
     public Transform table;
@@ -18,15 +18,20 @@ public class Ball : MonoBehaviour
     static float mass = 0.08f;
     static float friction = 0.1f;
     static float radius = 0.16f;
+    static float flipperLength = 0.86f;
     Vector3 vel;
     Vector3 acc;
     Vector3 grav;
     bool rolling = false;
     bool launched = false;
-    bool flipped = false;
-    Vector3 flipperNormal;
     Vector3 flipperPoint;
+    //Vector3 flipperNormal;
     //Vector3 startPos;
+    //SphereCast1 sc;
+
+    NarrowPhase check_and_apply_collision;
+    List<GameObject> bumpers;
+    List<GameObject> walls;
 
     void Start() {
         //startPos = transform.position;
@@ -39,6 +44,22 @@ public class Ball : MonoBehaviour
         grav = new Vector3(0, 0, gravity);
         vel = new Vector3(0, 0, -1.5f);
         acc = Vector3.zero;
+        //sc = GetComponentsInChildren<SphereCast1>()[0];
+
+        check_and_apply_collision = GameObject.Find("PlayArea").GetComponent<NarrowPhase>();
+
+        bumpers = new List<GameObject>();
+
+        for (int i = 1; i <= 7; i++)
+        {
+            bumpers.Add(GameObject.Find("Bumper" + i.ToString()));
+        }
+
+        walls = new List<GameObject>();
+
+        walls.Add(GameObject.Find("TopBoundary"));
+        walls.Add(GameObject.Find("LeftBound"));
+        walls.Add(GameObject.Find("RightBound"));
     }
 
     /*
@@ -58,51 +79,72 @@ public class Ball : MonoBehaviour
         // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
         grav.x = gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad);
 
+        // Update ball acceleration
+        if (!rolling) {
+            acc += grav * Time.fixedDeltaTime;
+        }
+        acc -= acc * friction * Time.fixedDeltaTime;
+        acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
+        acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
+
+        // Update ball velocity
+        vel += acc * Time.fixedDeltaTime;
+        vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
+        vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
+
         // Update ball position
         Vector3 pos = transform.position;
         pos += vel * Time.fixedDeltaTime; // + acc * Mathf.Pow(Time.deltaTime, 2) / 2;
         pos.y = radius;
         transform.position = pos;
 
-        // Update ball velocity
-        vel += acc * Time.fixedDeltaTime;
-        if (vel.z < maxFallSpeed) {
-            vel.z = maxFallSpeed;
+        //sc.ChangeScale(vel * Time.fixedDeltaTime);
+
+        // collision with bumpers
+        foreach (GameObject bumper in bumpers)
+        {
+            check_and_apply_collision.collide(bumper);
         }
 
-        // Update ball acceleration
-        if (!rolling) {
-            acc += grav * Time.fixedDeltaTime;
+        // collision with TopBoundary, LeftBound and RightBound
+        foreach (GameObject wall in walls)
+        {
+            check_and_apply_collision.collide(wall);
         }
-        acc -= acc * friction * Time.fixedDeltaTime;
-        if (acc.z < maxFallAcc) {
-            acc.z = maxFallAcc;
-        }
+        
     }
 
     // For plunger
     public void Launch(float force) {
-        ApplyForce(force * Vector3.forward);
+        ApplyForce(force * Vector3.forward, -1.0f);
         launched = true;
     }
 
-    // Rudimentary, need to apply torque and not linear force
-    public void Flip(float force, Vector3 jointPos) {
-        if (flipperNormal.z < 0) {
-            flipperNormal *= -1;
-        }
-        Vector3 F = force * flipperNormal;
-        Vector3 r = flipperPoint - jointPos;
-        Vector3 torque = Vector3.Cross(r, F);
-        ApplyForce(torque);
-        flipped = true;
+    // For flipper
+    // Need to prevent ball from clipping through during flipping motion
+    public void Flip(float timeMul, Vector3 jointPos) {
+        Vector3 torque = 1.25f * Vector3.forward; //flipperNormal.normalized;
+        float spaceMul = (flipperPoint - jointPos).magnitude / flipperLength;
+        torque *= (timeMul + 0.25f) * spaceMul;
+        ApplyForce(torque, spaceMul);
     }
 
-    void ApplyForce(Vector3 force) {
+    void ApplyForce(Vector3 force, float spaceMul) {
+        acc *= 0.5f;
+        vel *= 0.5f;
         acc += force / mass;
+        acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
+        acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
         vel += acc;
-    }
+        vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
+        vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
 
+        float displacement = 0.25f;
+        if (spaceMul > 0 && vel.magnitude < displacement) {
+            transform.position += Vector3.forward * 0.25f * spaceMul;
+        }
+    }
+    
     void OnCollisionEnter(Collision collision) {
         GameObject obj = collision.gameObject;
         ContactPoint contact;
@@ -118,8 +160,9 @@ public class Ball : MonoBehaviour
             }
 
             // Ball bounces off if it hits a bumper
-            if (obj.CompareTag("Bumper")) {
-                vel = Vector3.Reflect(vel, normal);
+            if (obj.CompareTag("Bumper") || obj.name == "TopBoundary" || obj.name == "LeftBound" || obj.name == "RightBound")
+            {
+                // ignore
             }
             // Ball stops moving when it is on the plunger
             else if(obj.CompareTag("Plunger")) {
@@ -131,31 +174,45 @@ public class Ball : MonoBehaviour
                 vel -= Vector3.Dot(vel, normal) * normal;
                 acc -= Vector3.Dot(acc, normal) * normal;
                 if (obj.CompareTag("Flipper")) {
-                    flipperNormal = normal;
+                    flipperPoint = contact.point;
+                    //flipperNormal = normal;
                 }
             }
         }
     }
 
     // For the scenarios where the obstacle is below the ball, so that it doesn't fall through
-    void OnCollisionStay(Collision collision) {
+    void OnCollisionStay(Collision collision)
+    {
         GameObject obj = collision.gameObject;
         rolling = true;
 
         // Prevent ball from falling through the plunger
-        if (obj.CompareTag("Plunger") && !launched) {
+        if (obj.CompareTag("Plunger") && !launched)
+        {
             acc.z = 0;
             vel.z = 0;
         }
         // Roll along the wall
-        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper") && !flipped)) {
-            Vector3 normal;   
-            for (int i = 0; i < collision.contactCount; i++) {
-                normal = collision.GetContact(i).normal;
+        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper")))
+        {
+            Vector3 normal;
+            for (int i = 0; i < collision.contactCount; i++)
+            {
+                ContactPoint contact = collision.GetContact(i);
+                normal = contact.normal;
+
+                // Prevent clipping
+                if (contact.separation < radius)
+                {
+                    transform.position = contact.point + normal * radius;
+                }
+                //normal = collision.GetContact(i).normal;
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));
-                if (obj.CompareTag("Flipper")) {
-                    flipperNormal = normal;
+                if (obj.CompareTag("Flipper"))
+                {
                     flipperPoint = collision.GetContact(i).point;
+                    //flipperNormal = normal;
                 }
             }
         }
@@ -164,9 +221,16 @@ public class Ball : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         rolling = false;
         launched = false;
-        flipped = false;
-        flipperNormal = Vector3.zero;
-        flipperPoint = Vector3.zero;
+    }
+
+    public Vector3 getVelocity()
+    {
+        return vel;
+    }
+
+    public void setVelocity(Vector3 velocity)
+    {
+        this.vel = velocity;
     }
 
     public Vector3 getVelocity()

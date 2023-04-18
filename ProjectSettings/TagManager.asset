@@ -11,7 +11,9 @@ TagManager:
   - Bound
   - Flipper
   - Cube
+  - SphereCast
   - Table
+  - BoundingBox
   layers:
   - Default
   - TransparentFX
