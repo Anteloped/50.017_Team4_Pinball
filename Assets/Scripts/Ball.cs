@@ -8,9 +8,7 @@ public class Ball : MonoBehaviour
 {
     //[SerializeField] Vector3 endGameCoord;
     float maxSpeed = 10f;
-    float maxFallSpeed = -10f;
     float maxAcc = 10f;
-    float maxFallAcc = -10f;
     public float gravity = -10f;
     public float tableAngle = 7f; // the angle at which the table slants forward
     public Transform table;
@@ -26,7 +24,7 @@ public class Ball : MonoBehaviour
     bool rolling = false;
     bool launched = false;
     Vector3 flipperPoint;
-    Vector3 flipperNormal;
+    //Vector3 flipperNormal;
     //Vector3 startPos;
     //SphereCast1 sc;
 
@@ -68,17 +66,11 @@ public class Ball : MonoBehaviour
         acc -= acc * friction * Time.fixedDeltaTime;
         acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
         acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
-        /*if (acc.z < maxFallAcc) {
-            acc.z = maxFallAcc;
-        }*/
 
         // Update ball velocity
         vel += acc * Time.fixedDeltaTime;
         vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
         vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
-        /*if (vel.z < maxFallSpeed) {
-            vel.z = maxFallSpeed;
-        }*/
 
         // Update ball position
         Vector3 pos = transform.position;
@@ -100,18 +92,22 @@ public class Ball : MonoBehaviour
     public void Flip(float timeMul, Vector3 jointPos) {
         Vector3 torque = 1.25f * Vector3.forward; //flipperNormal.normalized;
         float spaceMul = (flipperPoint - jointPos).magnitude / flipperLength;
-        torque *= timeMul * spaceMul;
+        torque *= (timeMul + 0.25f) * spaceMul;
         ApplyForce(torque, spaceMul);
     }
 
     void ApplyForce(Vector3 force, float spaceMul) {
+        acc *= 0.5f;
+        vel *= 0.5f;
         acc += force / mass;
         acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
         acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
         vel += acc;
         vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
         vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
-        if (spaceMul > 0) {
+
+        float displacement = 0.25f;
+        if (spaceMul > 0 && vel.magnitude < displacement) {
             transform.position += Vector3.forward * 0.25f * spaceMul;
         }
     }
@@ -145,7 +141,7 @@ public class Ball : MonoBehaviour
                 acc -= Vector3.Dot(acc, normal) * normal;
                 if (obj.CompareTag("Flipper")) {
                     flipperPoint = contact.point;
-                    flipperNormal = normal;
+                    //flipperNormal = normal;
                 }
             }
         }
@@ -176,7 +172,7 @@ public class Ball : MonoBehaviour
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));
                 if (obj.CompareTag("Flipper")) {
                     flipperPoint = collision.GetContact(i).point;
-                    flipperNormal = normal;
+                    //flipperNormal = normal;
                 }
             }
         }
