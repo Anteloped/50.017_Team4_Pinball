@@ -222,4 +222,9 @@ public class Ball : MonoBehaviour
     {
         this.vel = velocity;
     }
+
+    public void setGravity(float gravity)
+    {
+        this.grav = new Vector3(0, 0, gravity);
+    }
 }

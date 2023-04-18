@@ -8,6 +8,8 @@ using UnityEngine;
 public class NarrowPhase : MonoBehaviour
 {
     int scoreValue = 1;
+    float bumperPower = 1.8f;
+    float ballBounciness = 0.55f;
 
     // checks collision between ball and the specified collidingObject, then updates the ball accordingly
     public void collide(GameObject collidingObject)
@@ -52,7 +54,7 @@ public class NarrowPhase : MonoBehaviour
                     // check the x-coordinate to see if the collision occurred
                     if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness + 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.55f;
+                        ballVelocity[0] = -ballVelocity[0] * ballBounciness;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -68,7 +70,7 @@ public class NarrowPhase : MonoBehaviour
                     // check the x-coordinate to see if the collision occurred
                     if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness - 0.05f)
                     {
-                        ballVelocity[0] = -ballVelocity[0] * 0.55f;
+                        ballVelocity[0] = -ballVelocity[0] * ballBounciness;
                         ballScript.setVelocity(ballVelocity);
                     }
                 }
@@ -110,9 +112,8 @@ public class NarrowPhase : MonoBehaviour
                 if (bumperDistance < bumperRadius)
                 {
                     // assuming the bumper power (SHOULD INSTEAD GET THE VALUE FROM PLAYER-SELECTED GLOBAL PARAMETER)
-                    float bumperPower = parameters.getBumperPower(); // affects the velocity increase when the ball hits the bumper
                     Vector3 bumperNormal = -bumperDirection.normalized;
-                    ballVelocity = Vector3.Reflect(ballVelocity, bumperNormal);
+                    ballVelocity = Vector3.Reflect(ballVelocity, bumperNormal) * ballBounciness;
                     ballVelocity += (bumperPower * bumperNormal);
                     ballScript.setVelocity(ballVelocity);
 
@@ -122,5 +123,15 @@ public class NarrowPhase : MonoBehaviour
         }
 
         // check collision with flippers:
+    }
+
+    public void setBumperPower(float power)
+    {
+        this.bumperPower = power;
+    }
+
+    public void setBallBounciness(float bounciness)
+    {
+        this.ballBounciness = bounciness;
     }
 }
