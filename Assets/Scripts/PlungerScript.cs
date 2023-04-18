@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class PlungerScript : MonoBehaviour
 {
     float power;
-    [SerializeField] float minPower = 0f;
-    [SerializeField] float maxPower = 10f;
+    float minPower = 0.75f;
+    float maxPower = 1.0f;
     [SerializeField] Slider powerSlider;
     Ball ball;
     bool ballReady;
@@ -44,13 +44,14 @@ public class PlungerScript : MonoBehaviour
                 }
             }
 
-            if(Input.GetKeyUp(KeyCode.Space))
+            if (Input.GetKeyUp(KeyCode.Space))
             {
                 if (power < minPower) {
                     power = minPower;
                 }
                 
                 ball.Launch(power);
+                Debug.Log(power);
             }
         }
         else

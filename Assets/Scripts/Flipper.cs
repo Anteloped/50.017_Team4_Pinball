@@ -50,11 +50,10 @@ public class Flipper : MonoBehaviour
         }
 
         // Apply force to the ball if it is on the flipper
-        // Need to compute torque, and don't let the ball clip through during flipping motion
         if (Input.GetButtonDown(buttonName) && trigger.ball != null) {
-            float force = 1.0f - flipTimer / flipTime;
-            if (force > 0.0f) {
-                trigger.ball.Flip(force, transform.position);
+            float timeMul = 1.0f - flipTimer / flipTime;
+            if (timeMul > 0.0f) {
+                trigger.ball.Flip(timeMul, transform.position);
             }
         }
     }

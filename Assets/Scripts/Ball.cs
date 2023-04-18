@@ -1,14 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+//using UnityEngine.SceneManagement;
+using UnityEngine.Animations;
 
 public class Ball : MonoBehaviour
 {
-    [SerializeField] Vector3 endGameCoord;
+    //[SerializeField] Vector3 endGameCoord;
+    float maxSpeed = 10f;
     float maxFallSpeed = -10f;
+    float maxAcc = 10f;
     float maxFallAcc = -10f;
-
     public float gravity = -10f;
     public float tableAngle = 7f; // the angle at which the table slants forward
     public Transform table;
@@ -17,15 +19,16 @@ public class Ball : MonoBehaviour
     static float mass = 0.08f;
     static float friction = 0.1f;
     static float radius = 0.16f;
+    static float flipperLength = 0.86f;
     Vector3 vel;
     Vector3 acc;
     Vector3 grav;
     bool rolling = false;
     bool launched = false;
-    bool flipped = false;
-    Vector3 flipperNormal;
     Vector3 flipperPoint;
+    Vector3 flipperNormal;
     //Vector3 startPos;
+    //SphereCast1 sc;
 
     void Start() {
         //startPos = transform.position;
@@ -38,6 +41,7 @@ public class Ball : MonoBehaviour
         grav = new Vector3(0, 0, gravity);
         vel = new Vector3(0, 0, -1.5f);
         acc = Vector3.zero;
+        //sc = GetComponentsInChildren<SphereCast1>()[0];
     }
 
     /*
@@ -57,26 +61,32 @@ public class Ball : MonoBehaviour
         // Update grav vector based on the table's tilt angle; would be good if we used vector ops instead of sine
         grav.x = gravity * Mathf.Sin(-table.rotation.eulerAngles.z * Mathf.Deg2Rad);
 
+        // Update ball acceleration
+        if (!rolling) {
+            acc += grav * Time.fixedDeltaTime;
+        }
+        acc -= acc * friction * Time.fixedDeltaTime;
+        acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
+        acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
+        /*if (acc.z < maxFallAcc) {
+            acc.z = maxFallAcc;
+        }*/
+
+        // Update ball velocity
+        vel += acc * Time.fixedDeltaTime;
+        vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
+        vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
+        /*if (vel.z < maxFallSpeed) {
+            vel.z = maxFallSpeed;
+        }*/
+
         // Update ball position
         Vector3 pos = transform.position;
         pos += vel * Time.fixedDeltaTime; // + acc * Mathf.Pow(Time.deltaTime, 2) / 2;
         pos.y = radius;
         transform.position = pos;
 
-        // Update ball velocity
-        vel += acc * Time.fixedDeltaTime;
-        if (vel.z < maxFallSpeed) {
-            vel.z = maxFallSpeed;
-        }
-
-        // Update ball acceleration
-        if (!rolling) {
-            acc += grav * Time.fixedDeltaTime;
-        }
-        acc -= acc * friction * Time.fixedDeltaTime;
-        if (acc.z < maxFallAcc) {
-            acc.z = maxFallAcc;
-        }
+        //sc.ChangeScale(vel * Time.fixedDeltaTime);
     }
 
     // For plunger
@@ -85,21 +95,23 @@ public class Ball : MonoBehaviour
         launched = true;
     }
 
-    // Rudimentary, need to apply torque and not linear force
-    public void Flip(float force, Vector3 jointPos) {
-        if (flipperNormal.z < 0) {
-            flipperNormal *= -1;
-        }
-        Vector3 F = force * flipperNormal;
-        Vector3 r = flipperPoint - jointPos;
-        Vector3 torque = Vector3.Cross(r, F);
+    // For flipper
+    // Need to prevent ball from clipping through during flipping motion
+    public void Flip(float timeMul, Vector3 jointPos) {
+        Vector3 torque = 1.25f * Vector3.forward; //flipperNormal.normalized;
+        float spaceMul = (flipperPoint - jointPos).magnitude / flipperLength;
+        torque *= timeMul * spaceMul;
         ApplyForce(torque);
-        flipped = true;
     }
 
     void ApplyForce(Vector3 force) {
         acc += force / mass;
+        acc.x = Mathf.Clamp(acc.x, -maxAcc, maxAcc);
+        acc.z = Mathf.Clamp(acc.z, -maxAcc, maxAcc);
         vel += acc;
+        vel.x = Mathf.Clamp(vel.x, -maxSpeed, maxSpeed);
+        vel.z = Mathf.Clamp(vel.z, -maxSpeed, maxSpeed);
+        transform.position += Vector3.forward * Time.fixedDeltaTime;
     }
 
     void OnCollisionEnter(Collision collision) {
@@ -130,6 +142,7 @@ public class Ball : MonoBehaviour
                 vel -= Vector3.Dot(vel, normal) * normal;
                 acc -= Vector3.Dot(acc, normal) * normal;
                 if (obj.CompareTag("Flipper")) {
+                    flipperPoint = contact.point;
                     flipperNormal = normal;
                 }
             }
@@ -147,14 +160,21 @@ public class Ball : MonoBehaviour
             vel.z = 0;
         }
         // Roll along the wall
-        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper") && !flipped)) {
+        else if (obj.CompareTag("Wall") || (obj.CompareTag("Flipper"))) {
             Vector3 normal;   
             for (int i = 0; i < collision.contactCount; i++) {
-                normal = collision.GetContact(i).normal;
+                ContactPoint contact = collision.GetContact(i);
+                normal = contact.normal;
+
+                // Prevent clipping
+                if (contact.separation < radius) {
+                    transform.position = contact.point + normal * radius;
+                }
+                //normal = collision.GetContact(i).normal;
                 acc = Vector3.Cross(normal, Vector3.Cross(grav, normal));
                 if (obj.CompareTag("Flipper")) {
-                    flipperNormal = normal;
                     flipperPoint = collision.GetContact(i).point;
+                    flipperNormal = normal;
                 }
             }
         }
@@ -163,8 +183,5 @@ public class Ball : MonoBehaviour
     void OnCollisionExit(Collision collision) {
         rolling = false;
         launched = false;
-        flipped = false;
-        flipperNormal = Vector3.zero;
-        flipperPoint = Vector3.zero;
     }
 }
