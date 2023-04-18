@@ -55,7 +55,7 @@ public class Parameters : MonoBehaviour
 
     public void setGravity(float gravityLevel)
     {
-        this.gravity = - (gravityLevel - 3f) * 2.5f - 10f;
+        this.gravity = - (gravityLevel - 3f) * 4f - 10f;
         GameObject.FindGameObjectWithTag("Ball").GetComponent<Ball>().setGravity(this.gravity);
         Debug.Log(string.Format("Gravity changed to {0}", gravity));
     }
