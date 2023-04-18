@@ -7447,7 +7447,7 @@ GameObject:
   - component: {fileID: 1994069175}
   - component: {fileID: 1994069174}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: gameover
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7470,7 +7470,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 71.4}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1994069174
@@ -7495,7 +7495,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'GAME OVER
 
-    press reset to retry'
+
+    Press Reset to Retry'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -7528,7 +7529,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 0
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 256
   m_textAlignment: 65535
@@ -8115,7 +8116,7 @@ MonoBehaviour:
   cloudPrefab: {fileID: 105566, guid: decc2ba5add7b984aab134a07b436422, type: 3}
   width: 100
   depth: 100
-  stepMin: 20
+  stepMin: 50
   stepMax: 100
   threshold: 0.446
   noiseStrength: 20
