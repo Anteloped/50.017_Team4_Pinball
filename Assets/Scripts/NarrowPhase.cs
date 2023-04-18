@@ -7,8 +7,7 @@ using UnityEngine;
 // narrow phase of collision detection
 public class NarrowPhase : MonoBehaviour
 {
-    GameObject ball;
-    Ball ballScript;
+    float tolerance = 0.01f;
 
     // Start is called before the first frame update
     void Start()
@@ -25,19 +24,16 @@ public class NarrowPhase : MonoBehaviour
     // checks collision between ball and the specified collidingObject, then updates the ball accordingly
     public void collide(GameObject collidingObject)
     {
-        Debug.Log("collision function called");
-
         GameObject ball = GameObject.FindGameObjectWithTag("Ball");
         Ball ballScript = ball.GetComponent<Ball>();
 
         Vector3 ballPosition = ball.transform.position;
         Vector3 ballVelocity = ballScript.getVelocity();
+        float ballRadius = ball.transform.localScale[0] / 2;
 
         Vector3 collidingObjectPosition = collidingObject.transform.position;
 
         Parameters parameters = GameObject.Find("PlayArea").GetComponent<Parameters>();
-
-        float tolerance = 0.05f; // if the distance between objects falls below this tolerance, consider it as a collision
 
         // check collision with walls
         switch (collidingObject.name)
@@ -47,8 +43,10 @@ public class NarrowPhase : MonoBehaviour
                 // if the ball is travelling towards the collidingObject
                 if (ballVelocity[2] > 0)
                 {
+                    float wall_thickness = collidingObject.transform.localScale[1] / 2;
+
                     // check the z-coordinate to see if the collision occurred
-                    if (ballPosition[2] > collidingObjectPosition[2] - tolerance)
+                    if (ballPosition[2] + ballRadius > collidingObjectPosition[2] - wall_thickness - tolerance)
                     {
                         ballVelocity[2] = -ballVelocity[2];
                         ballScript.setVelocity(ballVelocity);
@@ -61,8 +59,10 @@ public class NarrowPhase : MonoBehaviour
                 // if the ball is travelling towards the collidingObject
                 if (ballVelocity[0] < 0)
                 {
+                    float wall_thickness = collidingObject.transform.localScale[0] / 2;
+
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] < collidingObjectPosition[0] + tolerance)
+                    if (ballPosition[0] - ballRadius < collidingObjectPosition[0] + wall_thickness + tolerance)
                     {
                         ballVelocity[0] = -ballVelocity[0];
                         ballScript.setVelocity(ballVelocity);
@@ -75,8 +75,10 @@ public class NarrowPhase : MonoBehaviour
                 // if the ball is travelling towards the collidingObject
                 if (ballVelocity[0] > 0)
                 {
+                    float wall_thickness = collidingObject.transform.localScale[0] / 2;
+
                     // check the x-coordinate to see if the collision occurred
-                    if (ballPosition[0] > collidingObjectPosition[0] - tolerance)
+                    if (ballPosition[0] + ballRadius > collidingObjectPosition[0] - wall_thickness - tolerance)
                     {
                         ballVelocity[0] = -ballVelocity[0];
                         ballScript.setVelocity(ballVelocity);
@@ -114,10 +116,10 @@ public class NarrowPhase : MonoBehaviour
             if (Vector3.Dot(ballVelocity, bumperDirection) > 0)
             {
                 // check the distance to see if the collision occurred
-                float bumperDistance = bumperDirection.magnitude;
+                float bumperDistance = bumperDirection.magnitude - ballRadius;
                 float bumperRadius = collidingObject.transform.localScale[0];
 
-                if (bumperDistance < bumperRadius + tolerance)
+                if (bumperDistance < bumperRadius - tolerance)
                 {
                     // assuming the bumper power (SHOULD INSTEAD GET THE VALUE FROM PLAYER-SELECTED GLOBAL PARAMETER)
                     float bumperPower = parameters.getBumperPower(); // affects the velocity increase when the ball hits the bumper
@@ -129,6 +131,6 @@ public class NarrowPhase : MonoBehaviour
             }
         }
 
-        // (needed ?) check collision with flippers
+        // check collision with flippers:
     }
 }
