@@ -1,4 +1,6 @@
-# Sky Pinball
+# Pinball in the Clouds
+
+To view the Project in Unity, import the project and open the Pinball Scene
 
 User Interface:
 Press and hold the space bar to launch the ball. The time for pressing the space bar will determine the force to launch the ball. The higher the force, the faster the ball will be launched.
